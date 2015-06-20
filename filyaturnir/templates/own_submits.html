@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block title %}Мои посылки{% endblock %}
+
+{% block submits_li %}active{% endblock %}
+
+
+{% block content %}
+<div style="text-align: right; width: 100%;">
+<div class="well" style="text-align: right; width: 400px; margin-left: auto; margin-right: 42px;">
+<form class="form-inline" action='/submit' {% if form.is_multipart %}enctype="multipart/form-data"{% endif %} method='POST' style="margin-bottom: 0px">
+    {% csrf_token %}
+    <select name='language' id='id_language'>
+        <option value='fpc'>Free Pascal</option>
+        <option value='g++'>GNU C++</option>
+        <option value='py3'>Python3</option>
+    </select>
+    <button type="submit" class="btn btn-primary">Отправить</button>
+    <br/>
+    <input type='file' name='source' id='id_source' width="300px">
+</form>
+</div>
+</div>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th style="text-align: center; width:1%"></th>
+            <th style="white-space: nowrap; width: 1%"></th>
+            <th style="white-space: nowrap; width: 1%"></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for submit in submits %}
+            {% if submit.status == "PD" %}
+            <tr class="warning">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-warning">Ожидание компиляции</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "CE" %}
+            <tr class="error">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-important">Ошибка компиляции</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "OK" %}
+            <tr class="success">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-success">OK</span>
+                {% if submit.current %}<span class="label label-primary">Текущее решение</span>{% endif %}
+                </td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/battle/{{ submit.check_battle.sid }}'">Посмотреть бой</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "CR" %}
+            <tr class="info">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-info">Компиляция</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "FA" %}
+            <tr class="error">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-inverse">Серверная ошибка</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "RU" %}
+            <tr class="warning">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-warning">Выполнение</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "PE" %}
+            <tr class="error">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-important">Неверный формат вывода</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/battle/{{ submit.check_battle.sid }}'">Посмотреть бой</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "TL" %}
+            <tr class="error">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-important">Превышено макимальное время работы</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/battle/{{ submit.check_battle.sid }}'">Посмотреть бой</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "RE" %}
+            <tr class="error">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-important">Ошибка времени выполнения</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/battle/{{ submit.check_battle.sid }}'">Посмотреть бой</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+{% endblock %}

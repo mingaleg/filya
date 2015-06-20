@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block jspreload %}
+<style>
+    .winner {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block title %}
+{% if username %}
+Битвы пользователя {{ username }}
+{% else %}
+Все битвы
+{% endif %}
+{% endblock %}
+
+{% block all_serials_li %}{% if not username %}active{% endif %}{% endblock %}
+
+
+{% block content %}
+{% if username %}
+<h1>Битвы пользователя {{ username }}</h1>
+{% else %}
+<h1>Все битвы</h1>
+{% endif %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th style="text-align: center; width:1%"></th>
+            <th style="white-space: nowrap; width: 1%"></th>
+            <th style="white-space: nowrap; width: 1%"></th>
+            <th style="white-space: nowrap; width: 1%"></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for serial in serials %}
+            <tr>
+                <td style="text-align: right"><b>{{ serial.sid }}</b></td>
+                <td style="white-space: nowrap">
+                    <a class="{{ serial.player1status }}" href="/all_serials/{{ serial.player1.username }}">{{ serial.player1 }}</a> vs
+                    <a class="{{ serial.player2status }}" href="/all_serials/{{ serial.player2.username }}">{{ serial.player2 }}</a>
+                </td>
+                <td style="font-weight: bold; white-space: nowrap">Best of {{ serial.games }}:</td>
+                <td style="font-weight: bold; white-space: nowrap">{{ serial.score1 }}&mdash;{{ serial.score2 }}</td>
+                <td>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/serial/{{ serial.sid }}'">Посмотреть</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+{% endblock %}

@@ -1,0 +1,8 @@
+battles/js/*
+battles/txt/*
+submits/bin/*
+submits/sandbox/*
+submits/source/*
+filyaturnir/filya.db
+*~
+__pycache__

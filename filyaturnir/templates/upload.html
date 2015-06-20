@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}New submit{% endblock %}
+
+{% block new_submit_li %}active{% endblock %}
+
+{% block content %}
+<form class="form-horizontal" action='/upload' method='POST' {% if form.is_multipart %}enctype="multipart/form-data"{% endif %}>
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="control-group">
+            <!--label class="control-label" for="inputEmail">Email</label-->
+            {{ field.label_tag }}
+            <div class="controls">
+                <!--input type="text" id="inputEmail" placeholder="Email"-->
+                {{ field }}
+            </div>
+        </div>
+    {% endfor %}
+</form>
+{% endblock %}

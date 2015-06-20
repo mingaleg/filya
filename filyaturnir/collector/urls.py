@@ -1,0 +1,20 @@
+from django.conf.urls import patterns, url
+
+urlpatterns = patterns('',
+    url(r'^$', 'collector.views.view_rules'),
+    url(r'^logout$', 'collector.views.logout'),
+    url(r'^upload$', 'collector.views.upload_submit'),
+    url(r'^submit$', 'collector.views.view_own_submits'),
+    url(r'^all_submits$', 'collector.views.view_all_submits'),
+    url(r'^all_serials$', 'collector.views.view_all_serials'),
+    url(r'^final_submits$', 'collector.views.view_last_ok_submits'),
+    url(r'^finals$', 'collector.views.download_finals'),
+    url(r'^all_submits/(?P<username>.+?)$', 'collector.views.view_all_submits_by_user'),
+    url(r'^submit/(?P<submit_id>\d+?)/source$', 'collector.views.view_source'),
+    url(r'^submit/(?P<submit_id>\d+?)/log$', 'collector.views.view_log'),
+    url(r'^battle/(?P<battle_id>\d+?)$', 'collector.views.view_battle'),
+    url(r'^serial/(?P<serial_id>\d+?)$', 'collector.views.view_serial'),
+    url(r'^makeserial$', 'collector.views.make_serial_1'),
+    url(r'^makeserial/(?P<firstsubmit>\d+?)$', 'collector.views.make_serial_2'),
+    url(r'^makeserial/(?P<firstsubmit>\d+?)/(?P<secondsubmit>\d+?)$', 'collector.views.make_serial'),
+)

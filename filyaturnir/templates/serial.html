@@ -1,0 +1,76 @@
+{% extends "tinytext.html" %}
+
+{% block jspreload %}
+<style>
+    .head {
+        font-size: x-large;
+        width: 90%;
+        margin-left: 5%;
+        margin-bottom: 40px;
+    }
+    span.score {
+        float: right;
+        font-weight: bold;
+    }
+    span.score:after {
+        content:'';
+        display:block;
+        clear: both;
+    }
+    .head .player {
+        margin: 5px;
+    }
+    .srow {
+        padding: 10px;
+        padding-bottom: 5px;
+    }
+    .links {
+        text-align: right;
+    }
+    .looser {
+        /* text-decoration: line-through; */
+    }
+    .winner {
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
+
+{% block title %}{{ serial }}{% endblock %}
+
+{% block header %}Best of {{ serial.games }} {% endblock %}
+
+{% block content %}
+<div class="head">
+    <div class="srow row1">
+        <span class="player p1 {{ serial.player1status }}">
+            {{ serial.player1 }}
+        </span>
+        <span class="score score1">
+            {{ serial.score1 }}
+        </span>
+    </div>
+    <div class="srow row2">
+        <span class="player p2 {{ serial.player2status }}">
+            {{ serial.player2 }}
+        </span>
+        <span class="score score2">
+            {{ serial.score2 }}
+        </span>
+    </div>
+</div>
+    <table class="table table-hover">
+        <tbody>
+            {% for battle in serial.battles %}
+                <tr>
+                    <td class="{{ battle.player1status }}">{{ battle.player1 }}</td>
+                    <td class="{{ battle.player2status }}">{{ battle.player2 }}</td>
+                    <td class="score">{{ battle.score }}</td>
+                    <td class="links">
+                        <button class="btn btn-mini" onclick="javascript:window.location='/battle/{{ battle.sid }}'">Посмотреть бой</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

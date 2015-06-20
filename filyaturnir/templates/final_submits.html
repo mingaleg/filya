@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}
+Итоговые посылки
+{% endblock %}
+
+{% block final_submits_li %}{% if not username %}active{% endif %}{% endblock %}
+
+
+{% block content %}
+<h1>Итоговые посылки
+    <a class="btn btn-primary btn-large" href="/finals" target="_blank">Скачать .zip</a>
+</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th style="text-align: center; width:1%"></th>
+            <th style="white-space: nowrap; width: 1%"></th>
+            <th style="white-space: nowrap; width: 1%"></th>
+            <th style="white-space: nowrap; width: 1%"></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for submit in submits %}
+            {% if submit.status == "WA" %}
+            <tr class="warning">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap"><a href="/all_submits/{{ submit.user.username }}">{{ submit.user.username }}</a></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-warning">Ожидание компиляции</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "CE" %}
+            <tr class="error">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap"><a href="/all_submits/{{ submit.user.username }}">{{ submit.user.username }}</a></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-important">Ошибка компиляции</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "OK" %}
+            <tr class="success">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap"><a href="/all_submits/{{ submit.user.username }}">{{ submit.user.username }}</a></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-success">OK</span>
+                <span class="label label-primary">Текущее решение</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "RU" %}
+            <tr class="info">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap"><a href="/all_submits/{{ submit.user.username }}">{{ submit.user.username }}</a></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-info">Компиляция</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% elif submit.status == "FA" %}
+            <tr class="error">
+                <td style="text-align: right"><b>{{ submit.sid }}</b></td>
+                <td style="white-space: nowrap"><a href="/all_submits/{{ submit.user.username }}">{{ submit.user.username }}</a></td>
+                <td style="white-space: nowrap">{{ submit.time }}</td>
+                <td style="white-space: nowrap">{{ submit.language }}</td>
+                <td><span class="label label-inverse">Серверная ошибка</span></td>
+                <td style="text-align: right;">
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/log'">Лог компиляции</button>
+                    <button class="btn btn-mini" onclick="javascript:window.location='/submit/{{ submit.sid }}/source'">Код программы</button>
+                </td>
+            </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+{% endblock %}

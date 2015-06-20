@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<h1>Выберите первую стратегию</h1>
+<table class="table table-bordered">
+    <tbody>
+        {% for submit in submits %}
+            {% if forloop.counter0|divisibleby:5 %}
+                <tr>
+            {% endif %}
+            <td><a href='/makeserial/{{ submit.sid }}'>{{ submit }}</a></td>
+            {% if forloop.counter|divisibleby:5 or forloop.last %}
+                </tr>
+            {% endif %}
+        {% endfor %}
+    </tbody>
+{% endblock %}
